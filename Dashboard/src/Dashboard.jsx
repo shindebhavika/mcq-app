@@ -48,7 +48,7 @@ export function Dashboard() {
   };
 
   return (
-<div className="min-h-screen w-full flex flex-col items-center pt-16 bg-gradient-to-br from-[#3c8576] to-[#171721] text-white">
+<div className="min-h-screen w-full flex flex-col items-center pt-16 bg-gradient-to-br from-[#50a997] to-[#171721] text-white">
   <div className="w-full max-w-3xl p-6 bg-white/10 backdrop-blur-lg rounded-xl shadow-lg border border-white/20">
     <div className="flex justify-between items-center mb-6">
       <h2 className="text-3xl font-extrabold text-[#7ae9f5]">Admin Dashboard 📊</h2>
