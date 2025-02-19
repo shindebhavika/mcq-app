@@ -48,10 +48,10 @@ export function Dashboard() {
   };
 
   return (
-<div className="min-h-screen w-full flex flex-col items-center pt-16 bg-gradient-to-br from-[#3d3d72] to-[#171721] text-white">
+<div className="min-h-screen w-full flex flex-col items-center pt-16 bg-gradient-to-br from-[#3c8576] to-[#171721] text-white">
   <div className="w-full max-w-3xl p-6 bg-white/10 backdrop-blur-lg rounded-xl shadow-lg border border-white/20">
     <div className="flex justify-between items-center mb-6">
-      <h2 className="text-3xl font-extrabold text-[#854CE6]">Admin Dashboard 📊</h2>
+      <h2 className="text-3xl font-extrabold text-[#7ae9f5]">Admin Dashboard 📊</h2>
       <button
         onClick={handleDownload}
         disabled={isDownloading}
@@ -66,7 +66,7 @@ export function Dashboard() {
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
-              strokeWidth="2"
+              strokeWidth="2"z
               strokeLinecap="round"
               strokeLinejoin="round"
             >
@@ -101,17 +101,17 @@ export function Dashboard() {
       </button>
     </div>
 
-    <div className="p-6 bg-white/10 backdrop-blur-md rounded-xl text-center shadow-lg border border-white/20">
+    <div className="p-6 bg-blue/10 backdrop-blur-md rounded-xl text-center shadow-lg border border-white/20">
       <h3 className="text-2xl font-semibold text-white mb-2">Survey Title     <img src={s2Image} alt="Survey Image" className="w-6 h-6 inline-block" /></h3> {/* Added Survey Title */}
 
       <h3 className="text-xl font-semibold text-gray-300">Total Surveys Submitted <img src={s2Image} alt="Survey Image" className="w-6 h-6 inline-block" /></h3>
-      <p className="text-5xl font-bold text-[#8a4cf5] animate-pulse">{dummyData.length}</p>
+      <p className="text-5xl font-bold text-[#6bfbb3] animate-pulse">{dummyData.length}</p>
     </div>
     <div className="mt-6">
           <h3 className="text-xl font-semibold text-white mb-3">Survey Participants</h3>
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="bg-[#854CE6] text-white">
+              <tr className="bg-[#218e8c] text-white">
                 <th className="px-4 py-2">ID</th>
                 <th className="px-4 py-2">Name</th>
                 <th className="px-4 py-2">Age</th>
