@@ -1,172 +1,136 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useEffect, useState } from "react";
-
+import s2Image from "./s2.png"
 export function Dashboard() {
-  const [ageCount, setAgeCount] = useState({
-    "GenZ": 0,
-    "Millennials": 0,
-    "GenX": 0,
-    "Baby Boomers": 0,
-    "Silent Generation": 0,
-  });
   const [totalSurveys, setTotalSurveys] = useState(0);
-  const [regionCount, setRegionCount] = useState({
-    "Mumbai": 0,
-    "Konkan Division": 0,
-    "Nashik Division": 0,
-    "Pune Division": 0,
-    "Aurangabad Division": 0,
-    "Nagpur": 0,
-  });
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          "https://maharastra-backend.vercel.app/get-data"
-        );
-        const data = response.data;
-        setTotalSurveys(data.totalNoOfEntries); // Set total survey count
-        setRegionCount(data.districtCount); // Set region count
-        setAgeCount(data.ageCount); // Set the data in the state
-      } catch (error) {
-        console.error("Error fetching data: ", error);
+  const [isDownloading, setIsDownloading] = useState(false);
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await axios.get("https://car-survey-backend.vercel.app/get-data");
+
+  //       if (response.data.entries && Array.isArray(response.data.entries)) {
+  //         setTotalSurveys(response.data.entries.length);
+  //       } else {
+  //         console.error("Unexpected response format:", response.data);
+  //       }
+  //     } catch (error) {
+  //       console.error("Error fetching data:", error);
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, []);
+  const dummyData = [
+    { id: 1, name: "John Doe", age: 28 },
+    { id: 2, name: "Alice Smith", age: 34 },
+    { id: 3, name: "Bob Johnson", age: 42 },
+    { id: 4, name: "Emma Brown", age: 25 },
+  ];
+  const handleDownload = async () => {
+    setIsDownloading(true); // Show loading state
+
+    try {
+      const response = await axios.get("https://car-survey-backend.vercel.app/download-xlsx");
+
+      if (response.data.downloadUrl) {
+        console.log(response.data.downloadUrl);
+        window.location.href = response.data.downloadUrl;
+      } else {
+        console.error("Download URL not found in response");
       }
-    };
-    fetchData();
-  }, []);
-  const handleDownload=async ()=>{
-  try {
-    const response = await axios.get('https://maharastra-backend.vercel.app/download-csv');
-    const downloadLink = response.data.downloadUrl;
-    window.location.href = downloadLink;
-  } catch (error) {
-    console.error("Error fetching the download URL", error);
-  }
-  }
+    } catch (error) {
+      console.error("Error fetching the download URL", error);
+    } finally {
+      setTimeout(() => setIsDownloading(false), 2000); // Reset loading state after 2 sec
+    }
+  };
+
   return (
-    <>
-      <div className="flex justify-between items-center drop-shadow-xl border-y-2 w-screen bg-blue-50 sticky top-0 z-50 ">
-        <h2 className="text-indigo-800 text-3xl p-2">ADMIN DASHBOARD 📊</h2>
-        <button className="h-fit w-fit bg-green-400 p-2 mr-6 drop-shadow-lg text-white hover:bg-green-500
-        " onClick={handleDownload}>
-          DOWNLOAD CSV 📩
-        </button>
-      </div>
-      <div className="w-60 h-40 bg-gray-100 p-4 m-4 rounded-lg shadow-lg flex flex-col justify-between text-center text-gray-800 font-medium text-lg ">
-        <div>
-          <span className="inline-block font-semibold text-gray-600">
-            Surveys submitted:📑
-          </span>
-        </div>
-        <div className="bg-teal-600 py-3 text-white rounded-md flex items-center justify-center text-3xl font-bold shadow-md">
-        {totalSurveys}
-        </div>
-      </div>
+<div className="min-h-screen w-full flex flex-col items-center pt-16 bg-gradient-to-br from-[#3d3d72] to-[#171721] text-white">
+  <div className="w-full max-w-3xl p-6 bg-white/10 backdrop-blur-lg rounded-xl shadow-lg border border-white/20">
+    <div className="flex justify-between items-center mb-6">
+      <h2 className="text-3xl font-extrabold text-[#854CE6]">Admin Dashboard 📊</h2>
+      <button
+        onClick={handleDownload}
+        disabled={isDownloading}
+        className={`relative flex items-center gap-3 px-6 py-3 font-bold border border-transparent rounded-full shadow-lg transition-transform duration-300
+        ${isDownloading ? "bg-gray-500 cursor-not-allowed" : "bg-gradient-to-r from-green-500 to-green-600 hover:scale-105 active:scale-95"}
+        text-white`}
+      >
+        {isDownloading ? (
+          <>
+            <svg
+              className="animate-spin w-6 h-6 text-white"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <circle cx="12" cy="12" r="10" strokeOpacity="0.25"></circle>
+              <path d="M12 2a10 10 0 0 1 10 10h-2a8 8 0 0 0-8-8V2z"></path>
+            </svg>
+            <span>Downloading...</span>
+          </>
+        ) : (
+          <>
+            <svg
+              strokeLinejoin="round"
+              strokeLinecap="round"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              viewBox="0 0 24 24"
+              height="24"
+              width="24"
+              className="w-6 h-6"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path fill="none" d="M0 0h24v24H0z" stroke="none"></path>
+              <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2"></path>
+              <path d="M7 11l5 5l5 -5"></path>
+              <path d="M12 4l0 12"></path>
+            </svg>
+            <span>Download Data</span>
+         
+          </>
+        )}
+      </button>
+    </div>
 
-      {/* //! REGION */}
-      <div className="flex justify-center">
-        <div className="w-5/6 bg-gray-50 p-4 m-4 rounded-md shadow-lg flex-col text-center text-gray-700 font-light text-xl">
-          <h1 className="text-3xl text-indigo-800">REGION-🗺️</h1>
-          <div className="flex flex-wrap justify-center">
-            {[
-                "Mumbai",
-                "Konkan Division",
-                "Nashik Division",
-                "Pune Division",
-                "Aurangabad Division",
-                "Nagpur",
-              ].map((region) => (
-                <div
-                  key={region}
-                  className="w-56 h-40 bg-blue-50 p-4 m-3 rounded-md shadow-lg flex-col text-center text-gray-700 font-light text-lg"
-                >
-                  {region.toUpperCase()} {/* Region name */}
-                  <div className="bg-indigo-500 rounded-md h-16 text-white flex items-center justify-center mt-3 text-2xl shadow-sm">
-                    {regionCount[region] || 0} {/* Display region count */}
-                  </div>
-                </div>
+    <div className="p-6 bg-white/10 backdrop-blur-md rounded-xl text-center shadow-lg border border-white/20">
+      <h3 className="text-2xl font-semibold text-white mb-2">Survey Title     <img src={s2Image} alt="Survey Image" className="w-6 h-6 inline-block" /></h3> {/* Added Survey Title */}
+
+      <h3 className="text-xl font-semibold text-gray-300">Total Surveys Submitted <img src={s2Image} alt="Survey Image" className="w-6 h-6 inline-block" /></h3>
+      <p className="text-5xl font-bold text-[#8a4cf5] animate-pulse">{dummyData.length}</p>
+    </div>
+    <div className="mt-6">
+          <h3 className="text-xl font-semibold text-white mb-3">Survey Participants</h3>
+          <table className="w-full text-left border-collapse">
+            <thead>
+              <tr className="bg-[#854CE6] text-white">
+                <th className="px-4 py-2">ID</th>
+                <th className="px-4 py-2">Name</th>
+                <th className="px-4 py-2">Age</th>
+              </tr>
+            </thead>
+            <tbody>
+              {dummyData.map((person) => (
+                <tr key={person.id} className="bg-white/10 border-b border-gray-600">
+                  <td className="px-4 py-2">{person.id}</td>
+                  <td className="px-4 py-2">{person.name}</td>
+                  <td className="px-4 py-2">{person.age}</td>
+                </tr>
               ))}
-          </div>
-        </div>
+            </tbody>
+          </table>
+  </div>
+  </div>
       </div>
 
-      {/* //! AGE GROUPS */}
-      <div className="flex justify-center">
-        <div className="w-5/6 bg-gray-50 p-4 m-4 rounded-md shadow-lg flex-col text-center text-gray-700 font-light text-xl">
-          <h1 className="text-3xl text-indigo-800">AGE GROUPS-🔢</h1>
-          <div className="flex flex-wrap justify-center">
-            {[
-              "GenZ",
-              "Millennials",
-              "GenX",
-              "Baby Boomers",
-              "Silent Generation",
-            ].map((generation) => (
-              <div
-                key={generation}
-                className="w-56 h-40 bg-slate-50 p-4 m-3 rounded-md shadow-lg flex-col text-center text-gray-700 font-light text-lg"
-              >
-                {generation}
-                <div className="bg-indigo-500 rounded-md h-16 text-white flex items-center justify-center mt-3 text-2xl shadow-sm">
-                  {ageCount[generation] || 0} {/* Display the actual value */}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
 
-      {/* //! GENERATION GROUPS */}
-      <div className="flex justify-center">
-        <div className="w-5/6 bg-gray-50 p-4 m-4 rounded-md shadow-lg flex-col text-center text-gray-700 font-light text-xl">
-          <h1 className="text-3xl text-indigo-800">GENERATION GROUP-🚸</h1>
-          <div className="flex flex-wrap justify-center">
-            {[
-              "GEN-Z",
-              "MILLENNIALS",
-              "GEN-X",
-              "BABY BOOMERS",
-              "SILENT GENERATION",
-            ].map((generation) => (
-              <div
-                key={generation}
-                className="w-56 h-40 bg-slate-50 p-4 m-3 rounded-md shadow-lg flex-col text-center text-gray-700 font-light text-lg"
-              >
-                {generation}
-                <div className="bg-indigo-500 rounded-md h-16 text-white flex items-center justify-center mt-3 text-2xl shadow-sm">
-                    {ageCount[generation] || 0} {/* Display region count */}
-                  </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* //! NCCS */}
-      <div className="flex justify-center">
-        <div className="w-5/6 bg-gray-50 p-4 m-4 rounded-md shadow-lg flex-col text-center text-gray-700 font-light text-xl">
-          <h1 className="text-3xl text-indigo-800">NCCS-🔣</h1>
-          <div className="flex flex-wrap justify-center">
-            {[
-              "NCCS A (17% quota)",
-              "NCCS B (22% quota)",
-              "NCCS C (29% quota)",
-              "NCCS D/E (32% quota)",
-            ].map((nccs) => (
-              <div
-                key={nccs}
-                className="w-56 h-40 bg-slate-50 p-4 m-3 rounded-md shadow-lg flex-col text-center text-gray-700 font-light text-lg"
-              >
-                {nccs}
-                <div className="bg-indigo-500 rounded-md h-16 text-white flex items-center justify-center mt-3 text-2xl shadow-sm">
-                  xyx
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    </>
   );
 }
