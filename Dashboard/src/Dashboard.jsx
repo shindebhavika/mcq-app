@@ -1,35 +1,41 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import s2Image from "./s2.png";
 
 export function Dashboard() {
+  const [data, setData] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
 
-  const dummyData = [
-    { id: 1, name: "John Doe", age: 28 },
-    { id: 2, name: "Alice Smith", age: 34 },
-    { id: 3, name: "Bob Johnson", age: 42 },
-    { id: 4, name: "Emma Brown", age: 25 },
-  ];
+  useEffect(() => {
+    const fetchData = async () => {
+      setIsLoading(true);
+      try {
+        const response = await axios.get("https://car-survey-backend.vercel.app/getInfo");
+        setData(response.data.data);
+      } catch (error) {
+        toast.error("Failed to fetch data ❌");
+        console.error("Error fetching data:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
 
   const handleDownload = async () => {
     setIsDownloading(true);
-
     try {
       const response = await axios.get("https://car-survey-backend.vercel.app/download-xlsx");
-
       if (response.data.downloadUrl) {
         window.location.href = response.data.downloadUrl;
-        
-        alert("File downloaded successfully ✅")
-       
+        alert("File downloaded successfully ✅");
       } else {
         toast.error("Download URL not found ❌");
       }
     } catch (error) {
-
       toast.error("Error fetching the download URL", error?.response || error);
       console.error("Error fetching the download URL", error?.response || error);
     } finally {
@@ -38,7 +44,7 @@ export function Dashboard() {
   };
 
   return (
-    <div className="min-h-screen w-full flex flex-col items-center pt-16 bg-gradient-to-br from-[#50a997] to-[#171721] text-white">
+    <div className="min-h-screen w-full flex flex-col items-center pt-16 bg-gradient-to-br from-[#357c94] to-[#2d0c2b] text-white">
       <div className="w-full max-w-3xl p-6 bg-white/10 backdrop-blur-lg rounded-xl shadow-lg border border-white/20">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-3xl font-extrabold text-[#7ae9f5]">Admin Dashboard 📊</h2>
@@ -49,75 +55,70 @@ export function Dashboard() {
             ${isDownloading ? "bg-gray-500 cursor-not-allowed" : "bg-gradient-to-r from-green-500 to-green-600 hover:scale-105 active:scale-95"}
             text-white`}
           >
-            {isDownloading ? (
-              <>
-                <svg
-                  className="animate-spin w-6 h-6 text-white"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <circle cx="12" cy="12" r="10" strokeOpacity="0.25"></circle>
-                  <path d="M12 2a10 10 0 0 1 10 10h-2a8 8 0 0 0-8-8V2z"></path>
-                </svg>
-                <span>Downloading...</span>
-              </>
-            ) : (
-              <>
-                <svg
-                  strokeLinejoin="round"
-                  strokeLinecap="round"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  viewBox="0 0 24 24"
-                  height="24"
-                  width="24"
-                  className="w-6 h-6"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path fill="none" d="M0 0h24v24H0z" stroke="none"></path>
-                  <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2"></path>
-                  <path d="M7 11l5 5l5 -5"></path>
-                  <path d="M12 4l0 12"></path>
-                </svg>
-                <span>Download Data</span>
-              </>
-            )}
+            {isDownloading ? "Downloading..." : "Download Data"}
           </button>
         </div>
 
         <div className="p-6 bg-blue/10 backdrop-blur-md rounded-xl text-center shadow-lg border border-white/20">
-          <h3 className="text-2xl font-semibold text-white mb-2">
-            Survey Title <img src={s2Image} alt="Survey Image" className="w-6 h-6 inline-block" />
-          </h3>
-          <h3 className="text-xl font-semibold text-gray-300">
-            Total Surveys Submitted <img src={s2Image} alt="Survey Image" className="w-6 h-6 inline-block" />
-          </h3>
-          <p className="text-5xl font-bold text-[#6bfbb3] animate-pulse">{dummyData.length}</p>
+          <h3 className="text-2xl font-semibold text-white mb-2">USED CAR MARKET STUDY</h3>
+          {isLoading ? (
+            <p>Loading...</p>
+          ) : data ? (
+            <>
+              <h3 className="text-xl font-semibold text-gray-300">Total Surveys Submitted</h3>
+              <p className="text-5xl font-bold text-[#6bfbb3] animate-pulse">{data.totalEntry}</p>
+            </>
+          ) : (
+            <p>No data available</p>
+          )}
         </div>
 
         <div className="mt-6">
-          <h3 className="text-xl font-semibold text-white mb-3">Survey Participants</h3>
+          <h3 className="text-xl font-semibold text-white mb-3">Survey Data</h3>
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="bg-[#218e8c] text-white">
-                <th className="px-4 py-2">ID</th>
-                <th className="px-4 py-2">Name</th>
-                <th className="px-4 py-2">Age</th>
+                <th className="px-4 py-2">City</th>
+                <th className="px-4 py-2">Total Entries</th>
               </tr>
             </thead>
             <tbody>
-              {dummyData.map((person) => (
-                <tr key={person.id} className="bg-white/10 border-b border-gray-600">
-                  <td className="px-4 py-2">{person.id}</td>
-                  <td className="px-4 py-2">{person.name}</td>
-                  <td className="px-4 py-2">{person.age}</td>
-                </tr>
-              ))}
+  {data?.city &&
+    Object.entries(data.city)
+      .filter(([city]) => city && city !== "undefined") // Ensure city is valid
+      .map(([city, count]) => (
+        <tr key={city} className="bg-white/10 border-b border-gray-600">
+          <td className="px-4 py-2">{city}</td>
+          <td className="px-4 py-2">{count}</td>
+        </tr>
+      ))}
+</tbody>
+
+          </table>
+        </div>
+
+        <div className="mt-6">
+          <h3 className="text-xl font-semibold text-white mb-3">Type of Respondent</h3>
+          <table className="w-full text-left border-collapse">
+            <thead>
+              <tr className="bg-[#218e8c] text-white">
+                <th className="px-4 py-2">Segment</th>
+                <th className="px-4 py-2">Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              {data && (
+                <>
+                  <tr className="bg-white/10 border-b border-gray-600">
+                    <td className="px-4 py-2">Segment 1 Mass Market vehicle buyer</td>
+                    <td className="px-4 py-2">{data.typeOfRespondent["1"] || 0}</td>
+                  </tr>
+                  <tr className="bg-white/10 border-b border-gray-600">
+                    <td className="px-4 py-2">Segment 2 Premium vehicle buyer</td>
+                    <td className="px-4 py-2">{data.typeOfRespondent["2"] || 0}</td>
+                  </tr>
+                </>
+              )}
             </tbody>
           </table>
         </div>
