@@ -70,7 +70,7 @@ export function Dashboard() {
     <div className="min-h-screen w-full flex flex-col items-center pt-16 bg-gradient-to-br from-[#45d6e7] to-[#2d0c2b] text-white">
       <div className="w-full max-w-3xl p-6 bg-white/10 backdrop-blur-lg rounded-xl shadow-lg border border-white/20">
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-3xl font-extrabold text-[#174e56]">Admin Dashboard 📊</h2>
+          <h2 className="text-3xl font-extrabold text-[#7ae9f5]">Admin Dashboard 📊</h2>
           <button
             onClick={handleDownload}
             disabled={isDownloading}
