@@ -67,10 +67,10 @@ export function Dashboard() {
   };
 
   return (
-    <div className="min-h-screen w-full flex flex-col items-center pt-16 bg-gradient-to-br from-[#357c94] to-[#2d0c2b] text-white">
+    <div className="min-h-screen w-full flex flex-col items-center pt-16 bg-gradient-to-br from-[#45d6e7] to-[#2d0c2b] text-white">
       <div className="w-full max-w-3xl p-6 bg-white/10 backdrop-blur-lg rounded-xl shadow-lg border border-white/20">
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-3xl font-extrabold text-[#7ae9f5]">Admin Dashboard 📊</h2>
+          <h2 className="text-3xl font-extrabold text-[#174e56]">Admin Dashboard 📊</h2>
           <button
             onClick={handleDownload}
             disabled={isDownloading}
@@ -93,7 +93,7 @@ export function Dashboard() {
         </div>
 
         <div className="p-6 bg-blue/10 backdrop-blur-md rounded-xl text-center shadow-lg border border-white/20">
-          <h3 className="text-2xl font-semibold text-white mb-2">USED CAR MARKET STUDY</h3>
+          <h3 className="text-2xl font-semibold text-white mb-2">Shop Survey</h3>
           {isLoading ? (
             <p>Loading...</p>
           ) : data ? (
@@ -106,55 +106,7 @@ export function Dashboard() {
           )}
         </div>
 
-        <div className="mt-6">
-          <h3 className="text-xl font-semibold text-white mb-3">Survey Data</h3>
-          <table className="w-full text-left border-collapse">
-            <thead>
-              <tr className="bg-[#218e8c] text-white">
-                <th className="px-4 py-2">City</th>
-                
-                <th className="px-4 py-2">Total Entries</th>
-              </tr>
-            </thead>
-            <tbody>
-              {data?.city &&
-                Object.entries(data.city)
-                  .filter(([city]) => city && city !== "undefined") // Ensure city is valid
-                  .map(([city, count]) => (
-                    <tr key={city} className="bg-white/10 border-b border-gray-600">
-                      <td className="px-4 py-2">{city}</td>
-                      <td className="px-4 py-2">{count}</td>
-                    </tr>
-                  ))}
-            </tbody>
-          </table>
-        </div>
-
-        <div className="mt-6">
-          <h3 className="text-xl font-semibold text-white mb-3">Type of Respondent</h3>
-          <table className="w-full text-left border-collapse">
-            <thead>
-              <tr className="bg-[#218e8c] text-white">
-                <th className="px-4 py-2">Segment</th>
-                <th className="px-4 py-2">Total</th>
-              </tr>
-            </thead>
-            <tbody>
-              {data && (
-                <>
-                  <tr className="bg-white/10 border-b border-gray-600">
-                    <td className="px-4 py-2">Segment 1 Mass Market vehicle buyer</td>
-                    <td className="px-4 py-2">{data.typeOfRespondent["1"] || 0}</td>
-                  </tr>
-                  <tr className="bg-white/10 border-b border-gray-600">
-                    <td className="px-4 py-2">Segment 2 Premium vehicle buyer</td>
-                    <td className="px-4 py-2">{data.typeOfRespondent["2"] || 0}</td>
-                  </tr>
-                </>
-              )}
-            </tbody>
-          </table>
-        </div>
+     
       </div>
     </div>
   );
