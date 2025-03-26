@@ -51,7 +51,7 @@ export function Dashboard() {
   const handleDownload = async () => {
     setIsDownloading(true);
     try {
-      const response = await axios.get("https://car-survey-backend.vercel.app/download-xlsx");
+      const response = await axios.get("https://shop-backend-lake-chi.vercel.app/download-xlsx");
       if (response.data.downloadUrl) {
         window.location.href = response.data.downloadUrl;
         alert("File downloaded successfully ✅");
@@ -110,20 +110,7 @@ export function Dashboard() {
     
     
       </h3>
-      {isLoading ? (
-        <p className="text-gray-300">Loading...</p>
-      ) : data ? (
-        <>
-          <h3 className="text-lg sm:text-xl font-semibold text-gray-300">
-            Total Surveys Submitted ✅
-          </h3>
-          <p className="text-4xl sm:text-5xl font-bold text-[#6bfbb3] animate-pulse">
-            {data.totalEntry}
-          </p>
-        </>
-      ) : (
-        <p className="text-gray-300">No data available</p>
-      )}
+      
     </div>
   </div>
 </div>
