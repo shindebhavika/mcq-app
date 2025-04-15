@@ -33,3 +33,7 @@ body {
 h1 {
   font-size: 3.2em;
   line-height: 1.1; */
+  body {
+  /* background-color: rgb(33, 77, 235); */
+  background: linear-gradient(to right, #2c7e87, #2d0c2b);
+  }
